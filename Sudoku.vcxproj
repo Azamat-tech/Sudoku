@@ -118,6 +118,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\SDL2-devel-2.0.20-VC\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,12 +144,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Model\src\Sudoku.cpp" />
     <ClCompile Include="src\generator.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\parser.cpp" />
     <ClCompile Include="src\puzzle.cpp" />
     <ClCompile Include="src\sudoku.cpp" />
+    <ClCompile Include="src\view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\constant.hpp" />
@@ -157,7 +158,7 @@
     <ClInclude Include="include\parser.hpp" />
     <ClInclude Include="include\puzzle.hpp" />
     <ClInclude Include="include\sudoku.hpp" />
-    <ClInclude Include="Model\header\Sudoku.h" />
+    <ClInclude Include="include\view.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="puzzle\puzzle.txt" />

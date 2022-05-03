@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 using namespace std;
 
 /* puzzle grid dimensions */
@@ -18,3 +16,10 @@ const int TO = 9;
 const int FOR_EASY = 17;
 const int FOR_MEDIUM = 33;
 const int FOR_HARD = 49;
+
+/* window size */
+const int WIDTH = 700;
+const int HEIGHT = 550;
+
+/* window title */
+inline const char* WINDOW_TITLE = "Sudoku";

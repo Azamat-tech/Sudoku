@@ -1,5 +1,4 @@
 #include "../include/generator.hpp"
-#include "../include/constant.hpp"
 
 Generator::Generator()
 {
