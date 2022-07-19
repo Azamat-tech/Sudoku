@@ -3,11 +3,13 @@
 #include <SDL.h>
 #include <iostream>
 #include <memory>
+#include <vector>
 
-#include "parser.hpp"
 #include "generator.hpp"
 #include "level.hpp"
 #include "view.hpp"
+#include "cell.hpp"
+#include "button.hpp"
 
 using namespace std;
 
@@ -18,9 +20,18 @@ public:
 	int play();
 
 private:
-	unique_ptr<Parser> parser;
+	// defaut level
+	Level level = Level::EASY;
+	// sudoku grid
+	vector<vector<Cell>> grid;
+	// buttons: Check, Next, Hint
+	
+	// unique_ptr<Parser> parser;
 	unique_ptr<Generator> generator;
 	unique_ptr<View> view;
 
-	Level level = Level::EASY;
+
+	void print_grid() const;
+	void create_interface_layout();
 };
+

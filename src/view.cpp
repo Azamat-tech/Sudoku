@@ -11,7 +11,7 @@ View::View() {
 	cout << "view instantiated" << endl;
 
 	/* initialize sdl */
-	CHECKFORERROR(SDL_INIT_VIDEO != 0, SDL_GetError());
+	CHECKFORERROR(SDL_Init(SDL_INIT_VIDEO), SDL_GetError());
 
 	/* initialize window and renderer */
 	SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_RENDERER_PRESENTVSYNC, &_window, &_renderer);

@@ -3,36 +3,33 @@
 Generator::Generator()
 {
 	srand((unsigned int)time(NULL));
-	solved = make_unique<Puzzle>();
-	unsolved = make_unique<Puzzle>();
 }
 
-int Generator::randomNumber(int n) {
+int Generator::random_number(int n) {
 	return rand() % n + 1;
 }
 
 // checks if the random number is inside the block
-bool Generator::safe_block(int row, int col, int rnd_num) const
+bool Generator::safe_block(int row, int col, int rnd_num, vector<vector<Cell>>& grid) const
 {
-	auto m = solved->get_grid();
-
 	for (int i = 0; i < SQN; i++) {
 		for (int j = 0; j < SQN; j++) {
-			if (m[row + i][col + j] == rnd_num) {
+			if (grid[row + i][col + j].get_number() == rnd_num) {
 				return false;
 			}
 		}
 	}
+
 	return true;
 }
 
 
-int Generator::get_block_value(int row, int col)
+int Generator::get_block_value(int row, int col, vector<vector<Cell>>& grid)
 {
-	int rnd_num = randomNumber(SIZE);
+	int rnd_num = random_number(SIZE);
 
-	while (!safe_block(row, col, rnd_num)) {
-		rnd_num = randomNumber(SIZE);
+	while (!safe_block(row, col , rnd_num, grid)) {
+		rnd_num = random_number(SIZE);
 	}
 
 	return rnd_num;
@@ -40,49 +37,45 @@ int Generator::get_block_value(int row, int col)
 
 
 // fill diagonal square
-void Generator::fill_square(int row, int col)
+void Generator::fill_square(int row, int col, vector<vector<Cell>>& grid)
 {
 	for (int i = 0; i < SQN; i++)
 	{
 		for (int j = 0; j < SQN; j++)
 		{
-			int value = get_block_value(row, col);
-			solved->set_value(row + i, col + j, value);
+			int value = get_block_value(row, col, grid);
+			grid[row + i][col + j].set_noneditable_square(value);
 		}
 	}
 }
 
-bool Generator::safe_row(int i, int val) const
+bool Generator::safe_row(int i, int val, vector<vector<Cell>>& grid) const
 {
-	auto m = solved->get_grid();
-
 	for (int j = 0; j < SIZE; j++) {
-		if (m[i][j] == val) {
+		if (grid[i][j].get_number() == val) {
 			return false;
 		}
 	}
 	return true;
 }
 
-bool Generator::safe_col(int j, int val) const
+bool Generator::safe_col(int j, int val, vector<vector<Cell>>& grid) const
 {
-	auto m = solved->get_grid();
-
 	for (int i = 0; i < SIZE; i++) {
-		if (m[i][j] == val) {
+		if (grid[i][j].get_number() == val) {
 			return false;
 		}
 	}
 	return true;
 }
 
-bool Generator::safe(int row, int col, int val) const
+bool Generator::safe(int row, int col, int val, vector<vector<Cell>>& grid) const
 {
-	return safe_row(row, val) && safe_col(col, val) && 
-			safe_block(row - row % SQN, col - col % SQN, val);
+	return safe_row(row, val, grid) && safe_col(col, val, grid) && 
+			safe_block(row - row % SQN, col - col % SQN, val, grid);
 }
 
-bool Generator::fill_remaining(int row, int col)
+bool Generator::fill_remaining(int row, int col, vector<vector<Cell>>& grid)
 {
 	// if every col in the row is filled but row is not at the end
 	// we want to move to the next row
@@ -118,79 +111,59 @@ bool Generator::fill_remaining(int row, int col)
 
 
 	for (int val = 1; val <= 9; val++) {
-		if (safe(row, col, val)) {
-			solved->set_value(row, col, val);
+		if (safe(row, col, val, grid)) {
+			grid[row][col].set_noneditable_square(val);
 
-			if (fill_remaining(row, col + 1)) {
+			if (fill_remaining(row, col + 1, grid)) {
 				return true;
 			}
-			solved->set_value(row, col, 0);
+			grid[row][col].set_noneditable_square(0);
 		}
 	}
 	return false;
 }
 
-void Generator::generate_puzzle() 
+void Generator::generate_puzzle(vector<vector<Cell>>& grid)
 {
-	auto grid = solved->get_grid();
 	// fill diagonal squares
 	for (int i = 0; i < SIZE; i = i + SQN)
 		// for diagonal box, start coordinates->i==j
-		fill_square(i, i);
+		fill_square(i, i, grid);
 
-	fill_remaining(0, SQN);
+	fill_remaining(0, SQN, grid);
 }
 
-void Generator::copy_puzzle() 
+void Generator::provide_hints(int n, vector<vector<Cell>>& grid) 
 {
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			unsolved->set_value(i, j, solved->get_value(i, j));
-		}
-	}
-}
-
-void Generator::provide_hints(int n) 
-{
-	copy_puzzle();
-
 	int hints = n;
-	auto grid = unsolved->get_grid();
 
 	while (hints > 0) {
-		int random_cell = randomNumber(SIZE * SIZE) - 1;
+		int random_cell = random_number(SIZE * SIZE) - 1;
 
 		int row = random_cell / SIZE; // floor
 		int col = random_cell % SIZE;
 
 		// not empty
-		if (grid[row][col] != 0) {
-			grid[row][col] = 0;
+		if (grid[row][col].get_number() != 0) {
+			grid[row][col].unset();
 			hints-=1;
 		}
 	}
 }
 
-unique_ptr<Puzzle> Generator::generate(Level level)
+void Generator::generate(Level level, vector<vector<Cell>>& grid)
 {
-	generate_puzzle();
+	generate_puzzle(grid);
 
 	switch (level) {
 		case (Level::EASY):
-			provide_hints(FOR_EASY);
+			provide_hints(FOR_EASY, grid);
 			break;
 		case (Level::MEDIUM):
-			provide_hints(FOR_MEDIUM);
+			provide_hints(FOR_MEDIUM, grid);
 			break;
 		case (Level::HARD):
-			provide_hints(FOR_HARD);
+			provide_hints(FOR_HARD, grid);
 			break;
 	}
-
-	return move(unsolved);
-}
-
-unique_ptr<Puzzle> Generator::get_solved()
-{
-	return move(solved);
 }

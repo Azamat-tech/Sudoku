@@ -18,8 +18,12 @@ const int FOR_MEDIUM = 33;
 const int FOR_HARD = 49;
 
 /* window size */
-const int WIDTH = 700;
-const int HEIGHT = 550;
+const int WIDTH = 1000;
+const int HEIGHT = 700;
+
+// Define Sudoku grid dimensions
+const int mGridHeight = 680;
+const int mGridWidth = 680;
 
 /* window title */
 inline const char* WINDOW_TITLE = "Sudoku";

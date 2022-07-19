@@ -7,33 +7,28 @@
 #include "puzzle.hpp"
 #include "constant.hpp"
 #include "level.hpp"
+#include "cell.hpp"
 
 class Generator {
 public:
 	Generator();
 
-	unique_ptr<Puzzle> generate(Level level);
-	unique_ptr<Puzzle> get_solved();
+	void generate(Level, vector<vector<Cell>>&);
 private:
-	// generator generates the puzzle 
-	unique_ptr<Puzzle> solved;
-	unique_ptr<Puzzle> unsolved;
-	
-	void copy_puzzle();
-	void generate_puzzle();
-	void provide_hints(const int);
+	void generate_puzzle(vector<vector<Cell>>&);
+	void provide_hints(const int, vector<vector<Cell>>&);
 
-	void fill_square(int , int );
-	bool fill_remaining(int, int);
+	void fill_square(int , int, vector<vector<Cell>>&);
+	bool fill_remaining(int, int, vector<vector<Cell>>&);
 
-	bool safe(int, int, int) const;
-	bool safe_row(int, int) const;
-	bool safe_col(int, int) const;
-	bool safe_block(int , int , int ) const;
+	bool safe(int, int, int, vector<vector<Cell>>&) const;
+	bool safe_row(int, int, vector<vector<Cell>>&) const;
+	bool safe_col(int, int, vector<vector<Cell>>&) const;
+	bool safe_block(int , int , int, vector<vector<Cell>>&) const;
 
-	int get_block_value(int , int );
+	int get_block_value(int , int, vector<vector<Cell>>&);
 
-	int randomNumber(int);
+	int random_number(int);
 };
 
 

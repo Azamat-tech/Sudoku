@@ -6,5 +6,6 @@ using namespace std;
 
 int main() {
 	Sudoku game;
-	return game.play();
+	game.play();
+	return 0;
 }

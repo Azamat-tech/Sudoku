@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\generator.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\parser.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="src\view.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\constant.hpp" />
     <ClInclude Include="include\generator.hpp" />
     <ClInclude Include="include\level.hpp" />
