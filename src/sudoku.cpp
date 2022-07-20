@@ -16,7 +16,7 @@ Sudoku::Sudoku() {
 
 	// parser = make_unique<Parser>();
 	generator = make_unique<Generator>();
-	// view = make_unique<View>();
+	view = make_unique<View>();
 }
 
 void Sudoku::print_grid() const {
@@ -74,17 +74,15 @@ void Sudoku::Sudoku::create_interface_layout()
 			else buttonStartCol += buttonWidth + thinBorder;
 
 			// Set button position and dimensions
-			SDL_Rect buttonRect = { buttonStartCol, buttonStartRow, buttonWidth, buttonHeight };
-			grid[gridRow][gridCol].set_button_rect(buttonRect);
-
+			SDL_Rect button_rect = { buttonStartCol, buttonStartRow, buttonWidth, buttonHeight };
+			grid[gridRow][gridCol].set_button_rect(button_rect);
 		}
 	}
 
 	/*----------------------------------Create check, and new buttons-------------------------------------*/
-	const int numberOfOtherButtons = 2;
-	mCheckButton.setTexture(mTextureCache[10]);
-	mNewButton.setTexture(mTextureCache[11]);
-	Button* otherButtons[numberOfOtherButtons] = { &mCheckButton, &mNewButton };
+	const int numberOfOtherButtons = 3;
+	check.set_texture(texture_cache[10]);
+	next.set_texture(texture_cache[11]);
 
 	// Redefine button width
 	// mGridWidth = 3 * thickBorder + 9 * numberOfOtherButtons (rearrange this equation)
@@ -96,18 +94,23 @@ void Sudoku::Sudoku::create_interface_layout()
 	// Reset starting column
 	int borderWidthTotal = 0;
 
-	// Set check, solve, and new buttons (last row)
-	for (int button = 0; button < numberOfOtherButtons; button++) // colBlock is every 3 columns of cells
-	{
-		// Add border width to total
-		if (button == 0) borderWidthTotal += thickBorder;
-		else borderWidthTotal += thickBorder;
-		int buttonStartCol = button * buttonWidth + borderWidthTotal;
+	borderWidthTotal += thickBorder;
+	buttonStartCol = 0 * buttonWidth + borderWidthTotal;
+	buttonRect = { buttonStartCol, buttonStartRow, buttonWidth, buttonHeight };
+	check.set_button_rect(buttonRect);
 
-		// Set button position and dimensions
-		SDL_Rect buttonRect = { buttonStartCol, buttonStartRow, buttonWidth, buttonHeight };
-		otherButtons[button]->setButtonRect(buttonRect);
-	}
+	// Set check, solve, and new buttons (last row)
+	//for (int button = 0; button < numberOfOtherButtons; button++) // colBlock is every 3 columns of cells
+	//{
+	//	// Add border width to total
+	//	if (button == 0) borderWidthTotal += thickBorder;
+	//	else borderWidthTotal += thickBorder;
+	//	int buttonStartCol = button * buttonWidth + borderWidthTotal;
+
+	//	// Set button position and dimensions
+	//	SDL_Rect buttonRect = { buttonStartCol, buttonStartRow, buttonWidth, buttonHeight };
+	//	otherButtons[button]->set_button_rect(buttonRect);
+	//}
 }
 
 
@@ -138,9 +141,6 @@ int Sudoku::play()
 	}
 	return 0;
 }
-
-
-// Problem: Getting the SDL window when running
 
 /*
 	Sudoku functionalities 

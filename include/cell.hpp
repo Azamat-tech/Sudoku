@@ -4,7 +4,9 @@ using namespace std;
 #include <iostream>
 #include <SDL.h>
 
-class Cell {
+#include "button.hpp"
+
+class Cell : public Button {
 public:
 	Cell();
 

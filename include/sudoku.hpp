@@ -25,7 +25,12 @@ private:
 	// sudoku grid
 	vector<vector<Cell>> grid;
 	// buttons: Check, Next, Hint
+	Button check;
+	Button next;
+	Button hint;
 	
+	SDL_Texture* texture_cache[14];
+
 	// unique_ptr<Parser> parser;
 	unique_ptr<Generator> generator;
 	unique_ptr<View> view;
